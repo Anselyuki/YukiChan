@@ -4,16 +4,16 @@ from io import BytesIO
 from PIL import ImageFont, ImageDraw, Image
 
 path = 'src/static/high_eq_image.png'
-fontpath = "src/static/msyh.ttc"
+fontPath = "src/static/msyh.ttc"
 
 
 def draw_text(img_pil, text, offset_x):
     draw = ImageDraw.Draw(img_pil)
-    font = ImageFont.truetype(fontpath, 48)
+    font = ImageFont.truetype(fontPath, 48)
     width, height = draw.textsize(text, font)
     x = 5
     if width > 390:
-        font = ImageFont.truetype(fontpath, int(390 * 48 / width))
+        font = ImageFont.truetype(fontPath, int(390 * 48 / width))
         width, height = draw.textsize(text, font)
     else:
         x = int((400 - width) / 2)
@@ -22,7 +22,7 @@ def draw_text(img_pil, text, offset_x):
 
 
 def text_to_image(text):
-    font = ImageFont.truetype(fontpath, 24)
+    font = ImageFont.truetype(fontPath, 24)
     padding = 10
     margin = 4
     text_list = text.split('\n')

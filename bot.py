@@ -1,33 +1,44 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import traceback
 
 import nonebot
+from nonebot import on_fullmatch, logger
 from nonebot.adapters.onebot.v11 import Adapter
+from nonebot import on_fullmatch
+from nonebot.adapters.onebot.v11 import (
+    ActionFailed,
+    Bot,
+    GroupMessageEvent,
+    MessageEvent,
+)
 
-# Custom your logger
-# 
-# from nonebot.log import logger, default_format
-# logger.add("error.log",
-#            rotation="00:00",
-#            diagnose=False,
-#            level="ERROR",
-#            format=default_format)
+from src.tools.pupu import get_Pupu_msg
 
-# You can pass some keyword args config to init function
 nonebot.init()
-# nonebot.load_builtin_plugins()
 app = nonebot.get_asgi()
 
 driver = nonebot.get_driver()
 driver.register_adapter(Adapter)
 driver.config.help_text = {}
 
-nonebot.load_plugins("src/plugins")
+nonebot.load_plugins("src/maimaidx")
 
-# Modify some config / config depends on loaded configs
-# 
-# config = driver.config
-# do something...
+bot_pupu = on_fullmatch("噗噗", block=False, priority=5)
+
+
+@bot_pupu.handle()
+async def send_pupu_msg(ev: MessageEvent, bot: Bot):
+    try:
+        if driver.config.pupu:
+            msg = await get_Pupu_msg()
+            await bot.send(ev, msg)
+    except ActionFailed:
+        logger.warning(traceback.format_exc())
+        try:
+            await bot.send(ev, "噗噗寄了>_<可能被风控了QAQ")
+        except Exception:
+            pass
+        return
+
 
 if __name__ == "__main__":
     nonebot.run()

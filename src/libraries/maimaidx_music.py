@@ -1,15 +1,16 @@
-import json
 import random
-from typing import Dict, List, Optional, Union, Tuple, Any
 from copy import deepcopy
+from typing import Dict, List, Optional, Union, Tuple, Any
 
 import requests
 
+
 def get_cover_len5_id(mid) -> str:
     mid = int(mid)
-    if mid > 10000 and mid <= 11000:
+    if 10000 < mid <= 11000:
         mid -= 10000
     return f'{mid:05d}'
+
 
 def cross(checker: List[Any], elem: Optional[Union[Any, List[Any]]], diff):
     ret = False
